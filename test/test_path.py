@@ -1004,6 +1004,12 @@ class Test_intersect(unittest.TestCase):
         intersections = a0.intersect(a1)
         assert_intersections(a0, a1, intersections, 1)
 
+    def test_arc_arc_2(self):
+        a0 = Arc(start=(112.648+5j), radius=(24+24j), rotation=0, large_arc=False, sweep=True, end=(136.648+29j))
+        a1 = Arc(start=(112.648+6.33538520071j), radius=(24+24j), rotation=0, large_arc=False, sweep=True, end=(120.542+5j))
+        intersections = a0.intersect(a1)
+        assert_intersections(a0, a1, intersections, 1)
+
 
 class TestPathTools(unittest.TestCase):
     # moved from test_pathtools.py
