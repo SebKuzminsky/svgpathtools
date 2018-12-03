@@ -1886,8 +1886,77 @@ class Arc(object):
             t2s = polyroots01(u1poly_mag2 - 1)
             t1s = [self.phase2t(phase(u1poly(t2))) for t2 in t2s]
             return list(zip(t1s, t2s))
+
         elif isinstance(other_seg, Arc):
             assert other_seg != self
+
+            import sys
+            print("arc-arc", file=sys.stderr)
+
+            # From "Intersection of two circles", at
+            # http://paulbourke.net/geometry/circlesphere/
+
+            # It's easy to find the intersections of two circles, so
+            # compute that and see if any of those
+            # intersection points are on the arcs.
+            if (self.rotation == 0) and (self.radius.real == self.radius.imag) and (other_seg.rotation == 0) and (other_seg.radius.real == other_seg.radius.imag):
+                r0 = self.radius.real
+                r1 = other_seg.radius.real
+                p0 = self.center
+                p1 = other_seg.center
+                d = abs(p0 - p1)
+                possible_inters = []
+
+                if d > (r0 + r1):
+                    # The circles are too far apart to intersect.
+                    pass
+
+                elif d < abs(r0 - r1):
+                    # Small circle is wholly contained within the other.
+                    pass
+
+                elif (d == 0) and (r0 == r1):
+                    # Circles are concentric and of equal radius...
+                    # FIXME: hopefully they intersect only at the endpoints.
+                    pass
+
+                elif (d == r0 + r1) or (d == abs(r0 - r1)):
+                    # The circles touch at exactly one point.
+                    # FIXME
+                    pass
+                
+                else:
+                    a = (pow(r0, 2.0) - pow(r1, 2.0) + pow(d, 2.0)) / (2.0 * d)
+                    h = sqrt(pow(r0, 2.0) - pow(a, 2.0))
+                    p2 = p0 + (a * (p1 - p0) / d)
+
+                    x30 = p2.real + (h * (p1.imag - p0.imag) / d)
+                    x31 = p2.real - (h * (p1.imag - p0.imag) / d)
+
+                    y30 = p2.imag - (h * (p1.real - p0.real) / d)
+                    y31 = p2.imag + (h * (p1.real - p0.real) / d)
+
+                    possible_inters = [ complex(x30, y30), complex(x31, y31) ]
+
+                inters = []
+                for p in possible_inters:
+                    print("looking at %s" % p, file=sys.stderr)
+
+                    self_t = self.point_to_t(p)
+                    if self_t is None: continue
+                    print("    self t is %s" % self_t, file=sys.stderr)
+
+                    other_t = other_seg.point_to_t(p)
+                    if other_t is None: continue
+                    print("    other t is %s" % other_t, file=sys.stderr)
+
+                    i = (self_t, other_t)
+                    print("    adding %s" % str(i), file=sys.stderr)
+                    inters.append(i)
+
+                print("inters: %s" % inters, file=sys.stderr)
+                return inters
+
             # This could be made explicit to increase efficiency
             longer_length = max(self.length(), other_seg.length())
             inters = bezier_intersections(self, other_seg,
@@ -1907,6 +1976,7 @@ class Arc(object):
                 else:
                     return [inters[0], inters[-1]]
             return inters
+
         else:
             raise TypeError("other_seg should be a Arc, Line, "
                             "QuadraticBezier, or CubicBezier object.")
