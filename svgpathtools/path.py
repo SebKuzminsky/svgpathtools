@@ -1891,7 +1891,6 @@ class Arc(object):
             assert other_seg != self
 
             import sys
-            print("arc-arc", file=sys.stderr)
 
             # From "Intersection of two circles", at
             # http://paulbourke.net/geometry/circlesphere/
@@ -1940,21 +1939,13 @@ class Arc(object):
 
                 inters = []
                 for p in possible_inters:
-                    print("looking at %s" % p, file=sys.stderr)
-
                     self_t = self.point_to_t(p)
                     if self_t is None: continue
-                    print("    self t is %s" % self_t, file=sys.stderr)
-
                     other_t = other_seg.point_to_t(p)
                     if other_t is None: continue
-                    print("    other t is %s" % other_t, file=sys.stderr)
-
                     i = (self_t, other_t)
-                    print("    adding %s" % str(i), file=sys.stderr)
                     inters.append(i)
 
-                print("inters: %s" % inters, file=sys.stderr)
                 return inters
 
             # This could be made explicit to increase efficiency
