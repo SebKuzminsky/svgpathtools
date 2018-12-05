@@ -1906,6 +1906,12 @@ class Arc(object):
                 d = abs(p0 - p1)
                 possible_inters = []
 
+                print("r0=%f" % r0)
+                print("r1=%f" % r1)
+                print("p0=%s" % p0)
+                print("p1=%s" % p1)
+                print("d=%f" % d)
+
                 if d > (r0 + r1):
                     # The circles are too far apart to intersect.
                     pass
