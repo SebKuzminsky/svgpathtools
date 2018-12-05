@@ -1923,7 +1923,7 @@ class Arc(object):
                     # The circles touch at exactly one point.
                     # FIXME
                     pass
-                
+
                 else:
                     a = (pow(r0, 2.0) - pow(r1, 2.0) + pow(d, 2.0)) / (2.0 * d)
                     h = sqrt(pow(r0, 2.0) - pow(a, 2.0))
