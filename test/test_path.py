@@ -1918,6 +1918,14 @@ class TestPathTools(unittest.TestCase):
 	p.append(Arc(start=(4.762+95.237j), radius=(4.762+4.762j), rotation=0.0, large_arc=False, sweep=True, end=(2.921+98.999j)))
         self.assertAlmostEqual(p.area(), -35.5869236607)
 
+        p = Path()
+        p.append(Arc(start=(106.58928+132.95833j), radius=(40.82143+83.910713j), rotation=0.0, large_arc=False, sweep=True, end=(74.472411+214.93917j)))
+        p.append(Arc(start=(74.472411+214.93917j), radius=(40.82143+83.910713j), rotation=0.0, large_arc=False, sweep=True, end=(28.658655+167.9207j)))
+        p.append(Arc(start=(28.658655+167.9207j), radius=(40.82143+83.910713j), rotation=0.0, large_arc=False, sweep=True, end=(41.237335+65.887886j)))
+        p.append(Line(start=(41.237335+65.887886j), end=(65.767853+132.95833j)))
+        p.append(Line(start=(65.767853+132.95833j), end=(106.58928+132.95833j)))
+        self.assert_almost_equal(p.area(), 6966.714888, places=6)
+
 
 if __name__ == '__main__':
     unittest.main()
